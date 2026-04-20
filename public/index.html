@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Registro de Datos</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Fredoka:wght@300..700&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/style.css">
 </head>
 <body>
@@ -12,18 +15,46 @@
 
         <form action="/registro" method="post" enctype="application/x-www-form-urlencoded">
             <div class="form-group">
-                <label>Nombre: </label>
+                <label>Estudiante: </label>
                 <input type="text" name="Estudiante" placeholder="Ingresa tu Nombre" required>
             </div>
 
             <div class="form-group">
-                <label>Matrícula</label>
+                <label>Matrícula: </label>
                 <input type="text" name="Matricula" placeholder="Ej: 20231234" required>
             </div>
 
             <div class="form-group">
                 <label>Carrera: </label>
-                <input type="text" name="Carrera" placeholder="Ej: Ingeniería en Sistemas" required>
+                <select name="Carrera" id="Carrera">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Cuatrimestre: </label>
+                <select name="Cuatrimestre" id="Cuatrimestre">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                </select>
             </div>
 
             <div class="form-group">
