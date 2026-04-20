@@ -8,44 +8,44 @@
 <body>
 
     <div class="container">
-        <h1>Registro de Entrada</h1>
+        <h1>Registro Biblioteca</h1>
 
-        <form>
+        <form action="/registro" method="post" enctype="application/x-www-form-urlencoded">
             <div class="form-group">
                 <label>Nombre</label>
-                <input type="text" placeholder="Ingresa tu nombre">
+                <input type="text" name="Estudiante" placeholder="Ingresa tu nombre">
             </div>
 
             <div class="form-group">
                 <label>Matrícula</label>
-                <input type="text" placeholder="Ej: 20231234">
+                <input type="text" name="Matricula" placeholder="Ej: 20231234">
             </div>
 
             <div class="form-group">
                 <label>Carrera</label>
-                <input type="text" placeholder="Ej: Ingeniería en Sistemas">
+                <input type="text" name="Carrera" placeholder="Ej: Ingeniería en Sistemas">
             </div>
 
             <div class="form-group">
                 <label>Día</label>
-                <input type="date">
+                <input type="date" name="Fecha">
             </div>
 
             <div class="form-row">
                 <div class="form-group">
                     <label>Hora de Entrada</label>
-                    <input type="time">
+                    <input type="time" name="HoraEntrada">
                 </div>
 
                 <div class="form-group">
                     <label>Hora de Salida</label>
-                    <input type="time">
+                    <input type="time" name="HoraSalida">
                 </div>
             </div>
 
             <div class="form-group">
                 <label>Asunto</label>
-                <textarea placeholder="Describe el motivo"></textarea>
+                <textarea placeholder="Describe el motivo" name="Asunto"></textarea>
             </div>
 
             <button type="submit">Registrar</button>
