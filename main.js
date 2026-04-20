@@ -18,7 +18,6 @@ const __dirname = import.meta.dirname;
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.use(express.static(path.join(__dirname, '/public')));
-app.use(express.static(path.join(__dirname, '/auth')));
 
 // SESSION
 app.use(session({
@@ -84,28 +83,27 @@ app.post('/verificado', async (req, res) => {
     if (error) {
         return res.redirect('/');
     }
-    res.redirect('/auth');
+    req.session.token = data.session.access_token;
+    res.redirect('/dashboard');
 });
 
-//MIDDLEWARE AUTH
-
-
-// AUTH 
-app.get('/auth', async (req, res) => {
-    const { data, error } = await supabase.auth.getSession()
-    //console.log(data)
-    let tokenUser = data.session.access_token;
-    let userToken = req.session.token = {token : tokenUser};
-    //console.log(tokenUser);
-    res.redirect('/waos')
-});
-
-app.get('/waos', (req, res) => {
-    //console.log(req.session.token);
-    if (!req.session.token) {
-        return res.redirect('/');
+// MIDDLEWARE DASHBOARD
+const MiddlewareDashboard = (req, res, next) => {
+    const TOKEN = req.session.token;
+    if (!TOKEN) {
+        return res.redirect('/troleado')
     }
-    res.json({hola: 'hola'});
+    next();
+}
+
+// DASHBOARD
+app.get('/dashboard',MiddlewareDashboard, (req, res) => {
+    res.sendFile(path.resolve('auth/auth.html'))
+});
+
+// TROLEADO
+app.get('/troleado', (req, res) => {
+    res.send('troleado');
 });
 
 app.listen(port, () => {

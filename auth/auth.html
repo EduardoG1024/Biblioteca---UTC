@@ -11,22 +11,7 @@
         <button>Salir</button>
     </nav>
     <!---->
-    <main>
-        <div id="containerEstudiantes"></div>
-        <script>
-            const containerEstudiantes = document.getElementById('containerEstudiantes');
-            fetch('/registrosHistorial')
-            .then(res => res.json())
-            .then(res => {
-                res.forEach(registro => {
-                    const p = document.createElement('p');
-                    p.textContent = JSON.stringify(registro);
-                    containerEstudiantes.appendChild(p);
-                })
-            })
-            .catch(err => console.error(err))
-        </script>
-    </main>
+    <h1>HOLAAAAAAAAAAAA</h1>
     <!---->
     <footer>
         <p id="footerPowered"></p>
