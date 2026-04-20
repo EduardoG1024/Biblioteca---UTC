@@ -18,12 +18,23 @@ app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.use(express.static(path.join(__dirname, '/public')));
 
+// SESSION
+app.use(session({
+    secret: 'keyboard cat',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {secure: true}
+}));
+
 // LIMITADOR MIDDLEWARE
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 Minutos
 	limit: 5,
 	standardHeaders: 'draft-8',
 	legacyHeaders: false,
+    keyGenerator: (req, res) => {
+        return req.sessionID || req.ip;
+    },
     message: 'Ya no Puedes Enviar mas Formularios'
 });
 
@@ -32,9 +43,16 @@ app.get('/', (req, res) => {
     res.redirect('index.html');
 });
 
+// MIDDLEWARE PARA TIPO DE DATOS DEL FRONTEND A SUPABASE
+// CHECAR QUE NO GUARDEN DATOS VACIOS
+function FiltrarDatos() {
+    
+}
+
 // ENDPOINT DATOS USUARIOS & SUPABASE
 app.post('/registro', limiter, async (req, res) => {
     console.log(req.body);
+    // SUPABASE GUARDADO
     try {
         const { data, error} = await supabase
         .from('Biblioteca UTC Registros')
