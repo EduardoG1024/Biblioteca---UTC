@@ -4,6 +4,7 @@ import express from "express";
 import rateLimit, {ipKeyGenerator} from "express-rate-limit";
 import session from "express-session";
 import { createClient } from "@supabase/supabase-js";
+import { error } from 'console';
 
 const supabase = createClient(
     process.env.SUPABASE_PUBLIC_URL,
@@ -17,13 +18,14 @@ const __dirname = import.meta.dirname;
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.use(express.static(path.join(__dirname, '/public')));
+app.use(express.static(path.join(__dirname, '/auth')));
 
 // SESSION
 app.use(session({
     secret: 'keyboard cat',
     resave: false,
     saveUninitialized: true,
-    cookie: {secure: true}
+    cookie: {secure: false} // CAMBIAR EN PRODUCCION A "TRUE" / "FALSE" ENTORNO LOCAL
 }));
 
 // LIMITADOR MIDDLEWARE
@@ -72,12 +74,38 @@ app.post('/registro', limiter, async (req, res) => {
     res.send('Datos Guardados');
 });
 
-// API PARA DATOS
-app.get('/registrosHistorial', async (req, res) => {
-    const { data, error } = await supabase
-    .from('Biblioteca UTC Registros')
-    .select()
-    res.send(data);
+// LOGIN ENDPOINT VERIFICACION DE TOKEN SUPABASE
+app.post('/verificado', async (req, res) => {
+    //console.log(req.body);
+    const { data, error } = await supabase.auth.signInWithPassword({
+    email: req.body.correo,
+    password: req.body.contraseña,
+    });
+    if (error) {
+        return res.redirect('/');
+    }
+    res.redirect('/auth');
+});
+
+//MIDDLEWARE AUTH
+
+
+// AUTH 
+app.get('/auth', async (req, res) => {
+    const { data, error } = await supabase.auth.getSession()
+    //console.log(data)
+    let tokenUser = data.session.access_token;
+    let userToken = req.session.token = {token : tokenUser};
+    //console.log(tokenUser);
+    res.redirect('/waos')
+});
+
+app.get('/waos', (req, res) => {
+    //console.log(req.session.token);
+    if (!req.session.token) {
+        return res.redirect('/');
+    }
+    res.json({hola: 'hola'});
 });
 
 app.listen(port, () => {

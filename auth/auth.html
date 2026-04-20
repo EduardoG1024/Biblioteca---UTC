@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auth UTC</title>
+</head>
+<body>
+    <nav>
+        <h1>Registro de Estudiantes</h1>
+        <button>Salir</button>
+    </nav>
+    <!---->
+    <main>
+        <div id="containerEstudiantes"></div>
+        <script>
+            const containerEstudiantes = document.getElementById('containerEstudiantes');
+            fetch('/registrosHistorial')
+            .then(res => res.json())
+            .then(res => {
+                res.forEach(registro => {
+                    const p = document.createElement('p');
+                    p.textContent = JSON.stringify(registro);
+                    containerEstudiantes.appendChild(p);
+                })
+            })
+            .catch(err => console.error(err))
+        </script>
+    </main>
+    <!---->
+    <footer>
+        <p id="footerPowered"></p>
+        <script>
+            const footerPowered = document.getElementById('footerPowered');
+            const año = new Date().getFullYear();
+            footerPowered.innerHTML = `Universidad Tecnologica de Culiacan ${año}`;
+        </script>
+    </footer>
+</body>
+</html>
