@@ -1,7 +1,7 @@
 import 'dotenv/config';
 import path from 'path';
 import express from "express";
-import rateLimit from "express-rate-limit";
+import rateLimit, {ipKeyGenerator} from "express-rate-limit";
 import session from "express-session";
 import { createClient } from "@supabase/supabase-js";
 
@@ -33,7 +33,7 @@ const limiter = rateLimit({
 	standardHeaders: 'draft-8',
 	legacyHeaders: false,
     keyGenerator: (req, res) => {
-        return req.sessionID || req.ip;
+        return req.sessionID || ipKeyGenerator(req);
     },
     message: 'Ya no Puedes Enviar mas Formularios'
 });
@@ -51,7 +51,7 @@ function FiltrarDatos() {
 
 // ENDPOINT DATOS USUARIOS & SUPABASE
 app.post('/registro', limiter, async (req, res) => {
-    console.log(req.body);
+    //console.log(req.body);
     // SUPABASE GUARDADO
     try {
         const { data, error} = await supabase
@@ -60,7 +60,7 @@ app.post('/registro', limiter, async (req, res) => {
             Estudiante: req.body.Estudiante,
             Matricula: req.body.Matricula,
             Carrera: req.body.Carrera,
-            Fecha: req.body.Dia,
+            Fecha: req.body.Fecha,
             Hora_Entrada: req.body.HoraEntrada,
             Hora_Salida: req.body.HoraSalida,
             Asunto: req.body.Asunto 
@@ -70,6 +70,14 @@ app.post('/registro', limiter, async (req, res) => {
         res.status(500).send('Error al Guardar Registro');
     };
     res.send('Datos Guardados');
+});
+
+// API PARA DATOS
+app.get('/registrosHistorial', async (req, res) => {
+    const { data, error } = await supabase
+    .from('Biblioteca UTC Registros')
+    .select()
+    res.send(data);
 });
 
 app.listen(port, () => {
