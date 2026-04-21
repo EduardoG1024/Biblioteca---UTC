@@ -11,7 +11,23 @@
         <button>Salir</button>
     </nav>
     <!---->
-    <h1>HOLAAAAAAAAAAAA</h1>
+    <main>
+        <div id="containerEstudiantes"></div>
+        <script>
+            const containerEstudiantes = document.getElementById('containerEstudiantes');
+            fetch('/RegistroDeEstudiantes')
+            .then(res => res.json())
+            .then(res => {
+                res.forEach(r => {
+                    console.log(r)
+                    const text = document.createElement('p');
+                    text.textContent = JSON.stringify(r);
+                    containerEstudiantes.appendChild(text);
+                })
+            })
+            .catch(err => console.error(err))
+        </script>
+    </main>
     <!---->
     <footer>
         <p id="footerPowered"></p>

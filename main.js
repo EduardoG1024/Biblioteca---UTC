@@ -101,6 +101,22 @@ app.get('/dashboard',MiddlewareDashboard, (req, res) => {
     res.sendFile(path.resolve('auth/auth.html'))
 });
 
+// API AUTH
+app.get('/RegistroDeEstudiantes', async (req, res) => {
+    try {
+        const { data, error } = await supabase
+        .from('Biblioteca UTC Registros')
+        .select('*');
+        if (error) {
+            return res.status(500).json({error});
+        }
+        console.log(data);
+        res.json(data);
+    } catch (err) {
+        res.status(500).send('Error al Obtener Datos');
+    }
+});
+
 // TROLEADO
 app.get('/troleado', (req, res) => {
     res.send('troleado');
