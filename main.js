@@ -61,6 +61,7 @@ app.post('/registro', limiter, async (req, res) => {
             Estudiante: req.body.Estudiante,
             Matricula: req.body.Matricula,
             Carrera: req.body.Carrera,
+            Cuatrimestre: req.body.Cuatrimestre,
             Fecha: req.body.Fecha,
             Hora_Entrada: req.body.HoraEntrada,
             Hora_Salida: req.body.HoraSalida,
@@ -106,11 +107,12 @@ app.get('/RegistroDeEstudiantes', async (req, res) => {
     try {
         const { data, error } = await supabase
         .from('Biblioteca UTC Registros')
-        .select('*');
+        .select('*')
+        .order('id', {ascending: false})
         if (error) {
             return res.status(500).json({error});
         }
-        console.log(data);
+        //console.log(data);
         res.json(data);
     } catch (err) {
         res.status(500).send('Error al Obtener Datos');
