@@ -30,7 +30,7 @@ app.use(session({
 // LIMITADOR MIDDLEWARE
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 Minutos
-	limit: 5,
+	limit: 10,
 	standardHeaders: 'draft-8',
 	legacyHeaders: false,
     keyGenerator: (req, res) => {
@@ -54,28 +54,28 @@ function FiltrarDatos() {
 app.post('/registro', limiter, async (req, res) => {
     //console.log(req.body);
     // SUPABASE GUARDADO
-    try {
-        const { data, error} = await supabase
-        .from('Biblioteca UTC Registros')
-        .insert({
-            Estudiante: req.body.Estudiante,
-            Matricula: req.body.Matricula,
-            Carrera: req.body.Carrera,
-            Cuatrimestre: req.body.Cuatrimestre,
-            Fecha: req.body.Fecha,
-            Hora_Entrada: req.body.HoraEntrada,
-            Hora_Salida: req.body.HoraSalida,
-            Asunto: req.body.Asunto 
+    const { data, error} = await supabase
+    .from('Biblioteca UTC Registros')
+    .insert({
+        Estudiante: req.body.Estudiante,
+        Matricula: req.body.Matricula,
+        Carrera: req.body.Carrera,
+        Cuatrimestre: req.body.Cuatrimestre,
+        Fecha: req.body.Fecha,
+        Hora_Entrada: req.body.HoraEntrada,
+        Hora_Salida: req.body.HoraSalida,
+        Asunto: req.body.Asunto 
 
-        });
-    } catch (error) {
-        res.status(500).send('Error al Guardar Registro');
-    };
+    });
+    if (error) {
+        console.error('Supabase Error: ', error);
+        return res.status(500).send('Error al Guardar Registro');
+    }
     res.send('Datos Guardados');
 });
 
 // LOGIN ENDPOINT VERIFICACION DE TOKEN SUPABASE
-app.post('/verificado', async (req, res) => {
+app.post('/verificado', limiter, async (req, res) => {
     //console.log(req.body);
     const { data, error } = await supabase.auth.signInWithPassword({
     email: req.body.correo,
